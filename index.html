@@ -185,6 +185,11 @@ textarea{resize:vertical;min-height:80px}
 .qr-ref{font-size:.8rem;color:var(--text-light);margin-bottom:.15rem;}
 .qr-bank{font-size:.78rem;color:var(--nude-dark);}
 
+
+/* Booked slots */
+.time-option label.booked{background:#f5f5f5;border-color:#e2e2e2;color:#bbb;cursor:not-allowed;position:relative;}
+.booked-tag{font-size:.65rem;color:#e53e3e;font-family:'Mitr',sans-serif;display:block;margin-top:.1rem;}
+
 @keyframes fadeDown{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
@@ -233,7 +238,7 @@ textarea{resize:vertical;min-height:80px}
               <label for="b1">
                 <span class="b-icon">🏙️</span>
                 <span class="b-name">เซ็นจูรี่<br>BTS อ่อนนุช</span>
-                <span class="b-hours">🕒 15:30 – 22:00 น.</span>
+                <span class="b-hours">🕒 15:00 – 22:30 น.</span>
               </label>
             </div>
             <div class="branch-option">
@@ -241,7 +246,7 @@ textarea{resize:vertical;min-height:80px}
               <label for="b2">
                 <span class="b-icon">🛍️</span>
                 <span class="b-name">บิ๊กซีหัวหมาก<br>เซ็นเตอร์</span>
-                <span class="b-hours">🕒 10:00 – 20:00 น.</span>
+                <span class="b-hours">🕒 10:30 – 20:00 น.</span>
               </label>
             </div>
           </div>
@@ -323,7 +328,7 @@ textarea{resize:vertical;min-height:80px}
 
         <div class="form-group">
           <label>หมายเหตุเพิ่มเติม (ถ้ามี)</label>
-          <textarea id="note" placeholder="เช่น ล้างสีเจล, ถอด PVC ต่อใหม่ 🌸"></textarea>
+          <textarea id="note" placeholder="เช่น สีชมพูพาสเทล, ลายดอกไม้เล็กๆ 🌸"></textarea>
         </div>
 
         <div class="form-group">
@@ -415,7 +420,7 @@ textarea{resize:vertical;min-height:80px}
 <div class="toast" id="toast"></div>
 
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYwuBrOQXes7eaVvIoKeWzJteisTOdXVK6T7xhIFnSmbCbwlkP-ghGOieJlMYL0nru/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPwei-BrGiqPEdRDaXrEMz2rTN7NRd1PE8h9U4ZTz_V0fXVkiARAuy-J0ePaMJF7YY/exec';
 
 // ── Branch slots ──
 function makeSlots(sh,sm,eh,em){
@@ -427,8 +432,8 @@ function makeSlots(sh,sm,eh,em){
   return r;
 }
 const BRANCH_TIMES={
-  'เซ็นจูรี่ BTS อ่อนนุช':makeSlots(15,30,22,30),
-  'บิ๊กซีหัวหมาก เซ็นเตอร์':makeSlots(10,0,20,0)
+  'เซ็นจูรี่ BTS อ่อนนุช':makeSlots(15,0,22,30),
+  'บิ๊กซีหัวหมาก เซ็นเตอร์':makeSlots(10,30,20,0)
 };
 
 document.querySelectorAll('input[name="branch"]').forEach(r=>{
