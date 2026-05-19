@@ -443,6 +443,9 @@ document.querySelectorAll('input[name="branch"]').forEach(r=>{
   });
 });
 
+  document.getElementById('cal-days').innerHTML=html;
+}
+
   async function renderSlots(branch){
     const slots = BRANCH_TIMES[branch] || [];
     const date  = document.getElementById('date').value;
@@ -471,8 +474,6 @@ document.querySelectorAll('input[name="branch"]').forEach(r=>{
       }).join('') +
       '</div>';
   }
-  document.getElementById('cal-days').innerHTML=html;
-}
 
 function pickDate(ds,d,e){
   e.stopPropagation();
