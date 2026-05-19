@@ -238,7 +238,7 @@ textarea{resize:vertical;min-height:80px}
               <label for="b1">
                 <span class="b-icon">🏙️</span>
                 <span class="b-name">เซ็นจูรี่<br>BTS อ่อนนุช</span>
-                <span class="b-hours">🕒 15:00 – 22:30 น.</span>
+                <span class="b-hours">🕒 15:30 – 22:30 น.</span>
               </label>
             </div>
             <div class="branch-option">
@@ -246,7 +246,7 @@ textarea{resize:vertical;min-height:80px}
               <label for="b2">
                 <span class="b-icon">🛍️</span>
                 <span class="b-name">บิ๊กซีหัวหมาก<br>เซ็นเตอร์</span>
-                <span class="b-hours">🕒 10:30 – 20:00 น.</span>
+                <span class="b-hours">🕒 10:00 – 20:00 น.</span>
               </label>
             </div>
           </div>
@@ -432,8 +432,8 @@ function makeSlots(sh,sm,eh,em){
   return r;
 }
 const BRANCH_TIMES={
-  'เซ็นจูรี่ BTS อ่อนนุช':makeSlots(15,0,22,30),
-  'บิ๊กซีหัวหมาก เซ็นเตอร์':makeSlots(10,30,20,0)
+  'เซ็นจูรี่ BTS อ่อนนุช':makeSlots(15,30,22,30),
+  'บิ๊กซีหัวหมาก เซ็นเตอร์':makeSlots(10,0,20,0)
 };
 
 document.querySelectorAll('input[name="branch"]').forEach(r=>{
