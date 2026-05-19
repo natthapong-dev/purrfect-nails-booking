@@ -484,6 +484,8 @@ function pickDate(ds,d,e){
   document.getElementById('date-display').classList.add('has-value');
   document.getElementById('err-date').classList.remove('show');
   closeCal();renderCal();
+const br=document.querySelector('input[name="branch"]:checked');
+if(br) renderSlots(br.value);
 }
 function chMonth(dir,e){
   e.stopPropagation();
