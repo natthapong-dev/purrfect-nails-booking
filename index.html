@@ -443,35 +443,33 @@ document.querySelectorAll('input[name="branch"]').forEach(r=>{
   });
 });
 
-function renderSlots(branch){
-  const slots=BRANCH_TIMES[branch]||[];
-  document.getElementById('time-container').innerHTML=
-    '<div class="time-grid">'+
-    slots.map((s,i)=>`<div class="time-option"><input type="radio" name="timeslot" id="t${i}" value="${s}"><label for="t${i}">${s}</label></div>`).join('')+
-    '</div>';
-}
+  async function renderSlots(branch){
+    const slots = BRANCH_TIMES[branch] || [];
+    const date  = document.getElementById('date').value;
+    const isBigC = branch.indexOf('บิ๊กซี') !== -1;
 
-// ── Calendar ──
-const TH_MONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-const NOW=new Date();
-let calY=NOW.getFullYear(),calM=NOW.getMonth(),selDate=null;
+    document.getElementById('time-container').innerHTML =
+      '<p class="time-placeholder">⏳ กำลังโหลดเวลาว่าง...</p>';
 
-function renderCal(){
-  document.getElementById('cal-title').textContent=TH_MONTHS[calM]+' '+(calY+543);
-  const first=new Date(calY,calM,1).getDay();
-  const days=new Date(calY,calM+1,0).getDate();
-  let html='';
-  for(let i=0;i<first;i++) html+='<button class="cal-day empty" disabled></button>';
-  for(let d=1;d<=days;d++){
-    const dt=new Date(calY,calM,d);
-    const ds=calY+'-'+String(calM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    const past=dt<new Date(NOW.getFullYear(),NOW.getMonth(),NOW.getDate());
-    const today=calY===NOW.getFullYear()&&calM===NOW.getMonth()&&d===NOW.getDate();
-    let c='cal-day';
-    if(past)c+=' disabled';
-    if(today)c+=' today';
-    if(selDate===ds)c+=' selected';
-    html+=`<button class="${c}" ${past?'disabled':''} onclick="pickDate('${ds}',${d},event)">${d}</button>`;
+    let booked = [];
+    if (isBigC && date && APPS_SCRIPT_URL.indexOf('YOUR_SCRIPT_ID') === -1) {
+      try {
+        const res  = await fetch(APPS_SCRIPT_URL + '?date=' + encodeURIComponent(date));
+        const data = await res.json();
+        booked = (data.booked || []).map(b => b.trim());
+      } catch(e) { booked = []; }
+    }
+
+    document.getElementById('time-container').innerHTML =
+      '<div class="time-grid">' +
+      slots.map((s,i) => {
+        const isBooked = booked.includes(s.trim());
+        return `<div class="time-option">
+          <input type="radio" name="timeslot" id="t${i}" value="${s}" ${isBooked?'disabled':''}>
+          <label for="t${i}" class="${isBooked?'booked':''}">${s}${isBooked?'<br><span class="booked-tag">เต็ม</span>':''}</label>
+        </div>`;
+      }).join('') +
+      '</div>';
   }
   document.getElementById('cal-days').innerHTML=html;
 }
