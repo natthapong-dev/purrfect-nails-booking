@@ -443,8 +443,29 @@ document.querySelectorAll('input[name="branch"]').forEach(r=>{
   });
 });
 
+function renderCal(){
+  document.getElementById('cal-title').textContent=TH_MONTHS[calM]+' '+(calY+543);
+  const first=new Date(calY,calM,1).getDay();
+  const days=new Date(calY,calM+1,0).getDate();
+  let html='';
+  for(let i=0;i<first;i++) html+='<button class="cal-day empty" disabled></button>';
+  for(let d=1;d<=days;d++){
+    const dt=new Date(calY,calM,d);
+    const ds=calY+'-'+String(calM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const past=dt<new Date(NOW.getFullYear(),NOW.getMonth(),NOW.getDate());
+    const today=calY===NOW.getFullYear()&&calM===NOW.getMonth()&&d===NOW.getDate();
+    let c='cal-day';
+    if(past)c+=' disabled';
+    if(today)c+=' today';
+    if(selDate===ds)c+=' selected';
+    html+=`<button class="${c}" ${past?'disabled':''} onclick="pickDate('${ds}',${d},event)">${d}</button>`;
+  }
   document.getElementById('cal-days').innerHTML=html;
 }
+
+const TH_MONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+const NOW=new Date();
+let calY=NOW.getFullYear(),calM=NOW.getMonth(),selDate=null;
 
   async function renderSlots(branch){
     const slots = BRANCH_TIMES[branch] || [];
