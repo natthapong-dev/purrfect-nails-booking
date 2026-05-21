@@ -190,14 +190,6 @@ textarea{resize:vertical;min-height:80px}
 .time-option label.booked{background:#f5f5f5;border-color:#e2e2e2;color:#bbb;cursor:not-allowed;position:relative;}
 .booked-tag{font-size:.65rem;color:#e53e3e;font-family:'Mitr',sans-serif;display:block;margin-top:.1rem;}
 
-
-/* Screenshot notice */
-.screenshot-notice{display:flex;align-items:flex-start;gap:.8rem;background:linear-gradient(135deg,#fff5f5,#fff);border:2px solid var(--pink-light);border-radius:16px;padding:1rem 1.1rem;margin:1rem 0;text-align:left;}
-.sc-icon{font-size:1.8rem;flex-shrink:0;}
-.sc-text{font-size:.88rem;color:var(--text);line-height:1.7;}
-.sc-text strong{color:var(--pink-deep);font-family:'Mitr',sans-serif;font-size:.95rem;}
-.sc-sub{font-size:.78rem;color:var(--text-light);}
-
 @keyframes fadeDown{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
@@ -254,7 +246,7 @@ textarea{resize:vertical;min-height:80px}
               <label for="b2">
                 <span class="b-icon">🛍️</span>
                 <span class="b-name">บิ๊กซีหัวหมาก<br>เซ็นเตอร์</span>
-                <span class="b-hours">🕒 10:30 – 20:00 น.</span>
+                <span class="b-hours">🕒 10:00 – 20:00 น.</span>
               </label>
             </div>
           </div>
@@ -441,7 +433,7 @@ function makeSlots(sh,sm,eh,em){
 }
 const BRANCH_TIMES={
   'เซ็นจูรี่ BTS อ่อนนุช':makeSlots(15,30,22,30),
-  'บิ๊กซีหัวหมาก เซ็นเตอร์':makeSlots(10,30,20,0)
+  'บิ๊กซีหัวหมาก เซ็นเตอร์':makeSlots(10,0,20,0)
 };
 
 document.querySelectorAll('input[name="branch"]').forEach(r=>{
@@ -450,6 +442,19 @@ document.querySelectorAll('input[name="branch"]').forEach(r=>{
     document.getElementById('err-branch').classList.remove('show');
   });
 });
+
+function renderSlots(branch){
+  const slots=BRANCH_TIMES[branch]||[];
+  document.getElementById('time-container').innerHTML=
+    '<div class="time-grid">'+
+    slots.map((s,i)=>`<div class="time-option"><input type="radio" name="timeslot" id="t${i}" value="${s}"><label for="t${i}">${s}</label></div>`).join('')+
+    '</div>';
+}
+
+// ── Calendar ──
+const TH_MONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+const NOW=new Date();
+let calY=NOW.getFullYear(),calM=NOW.getMonth(),selDate=null;
 
 function renderCal(){
   document.getElementById('cal-title').textContent=TH_MONTHS[calM]+' '+(calY+543);
@@ -470,39 +475,6 @@ function renderCal(){
   }
   document.getElementById('cal-days').innerHTML=html;
 }
-
-const TH_MONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-const NOW=new Date();
-let calY=NOW.getFullYear(),calM=NOW.getMonth(),selDate=null;
-
-  async function renderSlots(branch){
-    const slots = BRANCH_TIMES[branch] || [];
-    const date  = document.getElementById('date').value;
-    const isBigC = branch.indexOf('บิ๊กซี') !== -1;
-
-    document.getElementById('time-container').innerHTML =
-      '<p class="time-placeholder">⏳ กำลังโหลดเวลาว่าง...</p>';
-
-    let booked = [];
-    if (isBigC && date && APPS_SCRIPT_URL.indexOf('YOUR_SCRIPT_ID') === -1) {
-      try {
-        const res  = await fetch(APPS_SCRIPT_URL + '?date=' + encodeURIComponent(date));
-        const data = await res.json();
-        booked = (data.booked || []).map(b => b.trim());
-      } catch(e) { booked = []; }
-    }
-
-    document.getElementById('time-container').innerHTML =
-      '<div class="time-grid">' +
-      slots.map((s,i) => {
-        const isBooked = booked.includes(s.trim());
-        return `<div class="time-option">
-          <input type="radio" name="timeslot" id="t${i}" value="${s}" ${isBooked?'disabled':''}>
-          <label for="t${i}" class="${isBooked?'booked':''}">${s}${isBooked?'<br><span class="booked-tag">เต็ม</span>':''}</label>
-        </div>`;
-      }).join('') +
-      '</div>';
-  }
 
 function pickDate(ds,d,e){
   e.stopPropagation();
